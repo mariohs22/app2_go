@@ -24,30 +24,20 @@ jobs:
   #     - name: Test
   #       run: go test -v ./...
 
-  test:
+  lint:
+    name: lint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Run lint
-        run: make lint
-      - name: Run test
-        run: make test
-      # - name: Build
-      #   run: make build
-      # - name: Install
-      #   run: make install
-
-  # lint:
-  #   name: lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Run Go lint
-  #       uses: golangci/golangci-lint-action@v2
-  #       with:
-  #         version: latest
-  #         working-directory: app
+      - uses: actions/checkout@v2
+      - name: Run Go lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: latest
+          # working-directory: app
+      - name: Run Gosec Security scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
 
   # test:
   #   needs: lint
