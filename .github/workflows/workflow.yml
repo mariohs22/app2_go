@@ -49,7 +49,7 @@ jobs:
           args: ./...
 
   test:
-    needs: gosec
+    needs: sec
     strategy:
       matrix:
         go-version: [1.16.x]
