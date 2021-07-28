@@ -27,6 +27,8 @@ jobs:
   lint:
     name: lint
     runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
     steps:
       - uses: actions/checkout@v2
       - name: Run Go lint
