@@ -28,4 +28,4 @@ COPY --from=builder /app /app
 USER mario:mario
 # EXPOSE 8080/tcp
 EXPOSE 8080
-ENTRYPOINT [ "/app/main" ]
+ENTRYPOINT [ "/app" ]
