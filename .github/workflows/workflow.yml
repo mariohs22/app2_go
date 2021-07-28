@@ -13,58 +13,58 @@ env:
   REGION: us-central1
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Go lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: latest
 
-  #     - name: Set up Go
-  #       uses: actions/setup-go@v2
-  #       with:
-  #         go-version: 1.16
+  sec:
+    name: gosec
+    needs: lint
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Gosec Security scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
 
-  #     - name: Build
-  #       run: go build -v ./...
+  test:
+    needs: sec
+    strategy:
+      matrix:
+        go-version: [1.16.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Test
+        run: go test -v ./...
 
-  # lint:
-  #   name: lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Run Go lint
-  #       uses: golangci/golangci-lint-action@v2
-  #       with:
-  #         version: latest
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-  # sec:
-  #   name: gosec
-  #   needs: lint
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     GO111MODULE: on
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Run Gosec Security scanner
-  #       uses: securego/gosec@master
-  #       with:
-  #         args: ./...
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
 
-  # test:
-  #   needs: sec
-  #   strategy:
-  #     matrix:
-  #       go-version: [1.16.x]
-  #       os: [ubuntu-latest, macos-latest, windows-latest]
-  #   runs-on: ${{ matrix.os }}
-  #   steps:
-  #     - name: Install Go
-  #       uses: actions/setup-go@v2
-  #       with:
-  #         go-version: ${{ matrix.go-version }}
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-  #     - name: Test
-  #       run: go test -v ./...
+      - name: Build
+        run: go build -v ./...
 
   deploy:
     runs-on: ubuntu-latest
@@ -97,60 +97,3 @@ jobs:
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
-
-  # deploy:
-  #   name: Deploy to Amazon
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v1
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: us-west-1
-
-  #     - name: Login to Amazon ECR
-  #       id: login-ecr
-  #       uses: aws-actions/amazon-ecr-login@v1
-
-  #     - name: Check if repository exists
-  #       run: aws ecr describe-repositories --repository-names reponame || aws ecr create-repository --repository-name reponame
-
-  #     - name: Build, tag, and push image to Amazon ECR
-  #       id: build-image
-  #       env:
-  #         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-  #         ECR_REPOSITORY: reponame
-  #         IMAGE_TAG: ${{ github.sha }}
-  #       run: |
-  #         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-  #         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-  #         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-  #     - name: Download task definition
-  #       run: |
-  #         aws ecs describe-task-definition --task-definition my-task-definition-family --query taskDefinition > task-definition.json
-
-  #     - name: Render Amazon ECS task definition
-  #       id: render-web-container
-  #       uses: aws-actions/amazon-ecs-render-task-definition@v1
-  #       with:
-  #         task-definition: task-definition.json
-  #         container-name: web
-  #         image: ${{ steps.build-image.outputs.image }}
-
-  #     - name: Deploy to Amazon ECS service
-  #       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-  #       with:
-  #         task-definition: ${{ steps.render-web-container.outputs.task-definition }}
-  #         service: my-service
-  #         cluster: my-cluster
-  #         wait-for-service-stability: true
-
-  #     - name: Log out of Amazon ECR
-  #       if: always()
-  #       run: docker logout ${{ steps.login-ecr.outputs.registry }}
