@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  PROJECT_ID: app-go-321216
-  SERVICE: hello-cloud-run
+  PROJECT_ID: app-go-terraform
+  SERVICE: sample-docker-service
   REGION: us-central1
 
 jobs:
