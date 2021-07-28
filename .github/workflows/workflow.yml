@@ -1,28 +1,27 @@
-# name: CI/CD
+name: CI/CD
 
-# on:
-#   push:
-#     branches: [main]
-#   pull_request:
-#     branches: [main]
-#   workflow_dispatch:
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
-# env:
-#   PROJECT_ID: app-go-terraform
-#   SERVICE: sample-docker-service
-#   REGION: us-central1
+env:
+  PROJECT_ID: app-go-terraform
+  SERVICE: sample-docker-service
+  REGION: us-central1
 
-# jobs:
-#   lint:
-#     name: lint
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: Run Go lint
-#         uses: golangci/golangci-lint-action@v2
-#         with:
-#           version: latest
-
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Go lint
+        uses: golangci/golangci-lint-action@v2
+        with:
+          version: latest
 #   sec:
 #     name: gosec
 #     needs: lint
