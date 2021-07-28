@@ -8,59 +8,55 @@ on:
   workflow_dispatch:
 
 jobs:
-  #   build:
-  #     runs-on: ubuntu-latest
-  #     steps:
-  #     - uses: actions/checkout@v2
-
-  #     - name: Set up Go
-  #       uses: actions/setup-go@v2
-  #       with:
-  #         go-version: 1.16
-
-  #     - name: Build
-  #       run: go build -v ./...
-
-  #     - name: Test
-  #       run: go test -v ./...
-
-  lint:
-    name: lint
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run Go lint
-        uses: golangci/golangci-lint-action@v2
-        with:
-          version: latest
-          # working-directory: app
 
-  sec:
-    name: gosec
-    needs: lint
-    runs-on: ubuntu-latest
-    env:
-      GO111MODULE: on
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run Gosec Security scanner
-        uses: securego/gosec@master
-        with:
-          args: ./...
-
-  test:
-    needs: sec
-    strategy:
-      matrix:
-        go-version: [1.16.x]
-        os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Install Go
+      - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: ${{ matrix.go-version }}
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Test
-        run: go test -v ./...
+          go-version: 1.16
+
+      - name: Build
+        run: go build -v ./...
+
+  # lint:
+  #   name: lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Run Go lint
+  #       uses: golangci/golangci-lint-action@v2
+  #       with:
+  #         version: latest
+
+  # sec:
+  #   name: gosec
+  #   needs: lint
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     GO111MODULE: on
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Run Gosec Security scanner
+  #       uses: securego/gosec@master
+  #       with:
+  #         args: ./...
+
+  # test:
+  #   needs: sec
+  #   strategy:
+  #     matrix:
+  #       go-version: [1.16.x]
+  #       os: [ubuntu-latest, macos-latest, windows-latest]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: Install Go
+  #       uses: actions/setup-go@v2
+  #       with:
+  #         go-version: ${{ matrix.go-version }}
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #     - name: Test
+  #       run: go test -v ./...
