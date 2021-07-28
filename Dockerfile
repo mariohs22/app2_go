@@ -9,7 +9,7 @@ ARG USER=mario
 RUN addgroup -g ${GID} ${GROUP} && adduser -D -u ${UID} -G ${GROUP} ${USER}
 WORKDIR /app
 # Copy the project files inside the container.
-COPY app .
+COPY . .
 # Download project dependencies.
 RUN go mod download
 # Build the binary totally static
