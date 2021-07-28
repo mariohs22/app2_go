@@ -9,8 +9,11 @@ import (
 
 func main() {
 	r := gin.Default()
+	r.LoadHTMLFiles("index.html")
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "Hello world 2")
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"title": "Hello world 2",
+		})
 	})
 	err := r.Run()
 	if err != nil {
