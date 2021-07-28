@@ -23,7 +23,7 @@ ENV GIN_MODE=release
 COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /etc/group  /etc/group
 # Copy the binary built.
-COPY --from=builder /app/main /app/main
+COPY --from=builder /app /app
 # Use non-privileged user in container.
 USER mario:mario
 EXPOSE 8080/tcp
