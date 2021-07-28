@@ -27,8 +27,6 @@ jobs:
   lint:
     name: lint
     runs-on: ubuntu-latest
-    env:
-      GO111MODULE: on
     steps:
       - uses: actions/checkout@v2
       - name: Run Go lint
@@ -36,6 +34,14 @@ jobs:
         with:
           version: latest
           # working-directory: app
+
+  sec:
+    name: gosec
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - uses: actions/checkout@v2
       - name: Run Gosec Security scanner
         uses: securego/gosec@master
         with:
