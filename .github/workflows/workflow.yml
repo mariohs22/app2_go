@@ -27,15 +27,20 @@ jobs:
   lint:
     name: lint
     runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
     steps:
       - uses: actions/checkout@v2
-      - name: golangci-lint
+      - name: Run Go lint
         uses: golangci/golangci-lint-action@v2
         with:
           version: latest
           working-directory: app
-      - name: golangci-gosec
-        run: cd app && gosec -quiet ./...
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
+          working-directory: app
 
   # test:
   #   needs: lint
