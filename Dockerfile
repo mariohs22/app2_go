@@ -26,5 +26,6 @@ COPY --from=builder /etc/group  /etc/group
 COPY --from=builder /app /app
 # Use non-privileged user in container.
 USER mario:mario
-EXPOSE 8080/tcp
+# EXPOSE 8080/tcp
+EXPOSE 8080
 ENTRYPOINT [ "/app/main" ]
