@@ -16,6 +16,8 @@ resource "google_cloud_run_service" "service" {
   name     = var.service_name
   location = var.location
 
+  autogenerate_revision_name = "true"
+
   template {
     spec {
       containers {
