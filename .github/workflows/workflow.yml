@@ -43,13 +43,14 @@ jobs:
       # - name: Import service
       #   run: terraform init && terraform import google_cloud_run_service.service ${{ secrets.GCP_LOCATION }}/${{ secrets.GCP_SERVICE_NAME }}
       #   working-directory: ./infrastructure
-
       # - name: terraform
       #   run: make up
       #   working-directory: ./infrastructure
-
+      #--allow-unauthenticated
       - name: Create service
-        run: gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --region ${{ secrets.GCP_LOCATION }} --allow-unauthenticated
+        run: |-
+          gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --region ${{ secrets.GCP_LOCATION }}
+          gcloud beta run services add-iam-policy-binding --member=allUsers --role=roles/run.invoker --region=${{ secrets.GCP_LOCATION }}
 
       # - name: Deploy to Cloud Run
       #   id: deploy
