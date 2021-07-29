@@ -12,10 +12,6 @@ provider "google" {
   zone    = var.location
 }
 
-terraform {
-  backend "local" {}
-}
-
 resource "google_cloud_run_service" "service" {
   name     = var.service_name
   location = var.location
