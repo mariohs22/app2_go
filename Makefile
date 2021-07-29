@@ -16,8 +16,6 @@ VARIABLES = -var=path=${PWD}/config/resource-groups \
 
 .PHONY = all init plan apply destroy up down
 
-all:
-
 up: init plan apply
 
 down: init destroy
