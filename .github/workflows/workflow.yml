@@ -36,6 +36,12 @@ jobs:
 
       - name: Import service
         run: terraform import google_cloud_run_service.${{ secrets.GCP_SERVICE_NAME }} ${{ secrets.GCP_LOCATION }}/${{ secrets.GCP_SERVICE_NAME }}
+        env:
+          TF_VAR_project: ${{ secrets.GCP_PROJECT }}
+          TF_VAR_location: ${{ secrets.GCP_LOCATION }}
+          TF_VAR_gcr_region: ${{ secrets.GCP_REGION }}
+          TF_VAR_service_name: ${{ secrets.GCP_SERVICE_NAME }}
+          TF_VAR_image_name: ${{ secrets.GCP_IMAGE_NAME }}
 
       - name: terraform
         run: make up
