@@ -12,18 +12,6 @@ provider "google" {
   zone    = var.location
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# DEPLOY A GOOGLE CLOUD SOURCE REPOSITORY
-# ---------------------------------------------------------------------------------------------------------------------
-
-# resource "google_sourcerepo_repository" "repo" {
-#   name = var.repository_name
-# }
-
-# ---------------------------------------------------------------------------------------------------------------------
-# DEPLOY A CLOUD RUN SERVICE
-# ---------------------------------------------------------------------------------------------------------------------
-
 resource "google_cloud_run_service" "service" {
   name     = var.service_name
   location = var.location
@@ -48,18 +36,6 @@ resource "google_cloud_run_service" "service" {
   }
 }
 
-# ---------------------------------------------------------------------------------------------------------------------
-# EXPOSE THE SERVICE PUBLICALLY
-# We give all users the ability to invoke the service.
-# ---------------------------------------------------------------------------------------------------------------------
-
-# resource "google_cloud_run_service_iam_member" "allUsers" {
-#   service  = google_cloud_run_service.service.name
-#   location = google_cloud_run_service.service.location
-#   role     = "roles/run.invoker"
-#   member   = "allUsers"
-# }
-
 data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"
@@ -76,10 +52,6 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }
-
-# ---------------------------------------------------------------------------------------------------------------------
-# PREPARE LOCALS
-# ---------------------------------------------------------------------------------------------------------------------
 
 locals {
   image_name = var.image_name == "" ? "${var.gcr_region}.gcr.io/${var.project}/${var.service_name}" : var.image_name
