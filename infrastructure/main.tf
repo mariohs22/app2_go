@@ -13,7 +13,7 @@ provider "google" {
 }
 
 terraform {
-  backend "local" {}
+  backend "gcs" {}
 }
 
 resource "google_cloud_run_service" "service" {
