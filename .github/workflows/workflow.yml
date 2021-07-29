@@ -7,11 +7,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
-  SERVICE: ${{ secrets.GCP_SERVICE_NAME }}
-  REGION: ${{ secrets.GCP_LOCATION }}
-
 jobs:
   lint:
     name: lint
@@ -92,3 +87,6 @@ jobs:
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
+
+      - name: Cleanup untagged images
+        run: gcloud container images list-tags gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }} --filter='-tags:*' --format="get(digest)" --limit=10 > tags && while read p; do gcloud container images delete "gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}@$p" --quiet; done < tags
