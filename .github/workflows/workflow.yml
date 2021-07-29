@@ -49,7 +49,7 @@ jobs:
       #   working-directory: ./infrastructure
 
       - name: Create service
-        run: gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --allow-unauthenticated
+        run: gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --region ${{ secrets.GCP_LOCATION }} --allow-unauthenticated
 
       # - name: Deploy to Cloud Run
       #   id: deploy
