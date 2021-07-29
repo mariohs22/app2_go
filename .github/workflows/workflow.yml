@@ -49,9 +49,9 @@ jobs:
       #--allow-unauthenticated
       - name: Create service
         run: |-
-          gcloud components install beta --quiet
           gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --region ${{ secrets.GCP_LOCATION }}
-          gcloud beta run services add-iam-policy-binding --member=allUsers --role=roles/run.invoker --region=${{ secrets.GCP_LOCATION }}
+          gcloud components install beta --quiet
+          gcloud beta run services add-iam-policy-binding ${{ secrets.GCP_SERVICE_NAME }} --member=allUsers --role=roles/run.invoker --region=${{ secrets.GCP_LOCATION }}
 
       # - name: Deploy to Cloud Run
       #   id: deploy
