@@ -8,9 +8,9 @@ on:
   workflow_dispatch:
 
 env:
-  PROJECT_ID: app-go-terraform
-  SERVICE: sample-docker-service
-  REGION: us-central1
+  PROJECT_ID: ${{ secrets.GCP_PROJECT }}
+  SERVICE: ${{ secrets.GCP_SERVICE_NAME }}
+  REGION: ${{ secrets.GCP_LOCATION }}
 
 jobs:
   terraform:
