@@ -34,6 +34,9 @@ jobs:
           docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
           docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
 
+      - name: Import service
+        run: terraform import google_cloud_run_service.${{ secrets.GCP_SERVICE_NAME }} ${{ secrets.GCP_LOCATION }}/${{ secrets.GCP_SERVICE_NAME }}
+
       - name: terraform
         run: make up
         working-directory: ./infrastructure
