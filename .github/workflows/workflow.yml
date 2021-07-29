@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build application
-        run: make up
+        run: make init && make plan
         working-directory: ./infrastructure
 
   # lint:
