@@ -2,7 +2,7 @@
 # GCP_LOCATION = "us-central1"
 # GCP_REGION = "us"
 # GCP_SERVICE_NAME = "app-go-service"
-# GCP_IMAGE_NAME = "gcr.io/cloudrun/appgo"
+# GCP_IMAGE_NAME = "gcr.io/cloudrun/appgo"   us.gcr.io/app-go-terraform/app-go-service2
 # terraform init -reconfigure ${BACKEND_CONFIG} src
 # terraform plan ${VARIABLES} -out="plan.out"
 # terraform destroy ${VARIABLES} src
