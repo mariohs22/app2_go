@@ -22,6 +22,13 @@ jobs:
         uses: golangci/golangci-lint-action@v2
         with:
           version: latest
+      - name: The job has failure
+        if: ${{ failure() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          args: App2_go lint job has fail.
 
   sec:
     name: gosec
@@ -35,6 +42,13 @@ jobs:
         uses: securego/gosec@master
         with:
           args: ./...
+      - name: The job has failure
+        if: ${{ failure() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          args: App2_go gosec job has fail.
 
   # test:
   #   needs: sec
@@ -52,6 +66,13 @@ jobs:
   #       uses: actions/checkout@v2
   #     - name: Test
   #       run: go test -v ./...
+  # - name: The job has failure
+  #   if: ${{ failure() }}
+  #   uses: appleboy/telegram-action@master
+  #   with:
+  #     to: ${{ secrets.TELEGRAM_TO }}
+  #     token: ${{ secrets.TELEGRAM_TOKEN }}
+  #     args: App2_go test job has fail.
 
   deploy:
     name: Deploy
@@ -88,3 +109,26 @@ jobs:
 
       - name: Cleanup untagged images
         run: gcloud container images list-tags gcr.io/${{ env.GCP_PROJECT }}/${{ env.GCP_SERVICE }} --filter='-tags:*' --format="get(digest)" --limit=10 > tags && while read p; do gcloud container images delete "gcr.io/${{ env.GCP_PROJECT }}/${{ env.GCP_SERVICE }}@$p" --quiet; done < tags
+
+  telegram:
+    name: Telegram notification
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: The job has succeeded
+        if: ${{ success() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          args: App2_go CI/CD job has succeeded. App available at ${{ steps.deploy.outputs.url }}
+
+      - name: The job has failure
+        if: ${{ failure() }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          args: App2_go CI/CD job has fail.
