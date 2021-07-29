@@ -16,14 +16,10 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
-    environment: production
-    defaults:
-      run:
-        shell: bash
     steps:
       - uses: actions/checkout@v2
       - name: build application
-        run: make init && make plan
+        run: make up
         working-directory: ./infrastructure
 
   # lint:
