@@ -3,6 +3,9 @@
 # GCP_REGION = "us"
 # GCP_SERVICE_NAME = "app-go-service"
 # GCP_IMAGE_NAME = "gcr.io/cloudrun/appgo"
+# terraform init -reconfigure ${BACKEND_CONFIG} src
+# terraform plan ${VARIABLES} -out="plan.out"
+# terraform destroy ${VARIABLES} src
 
 
 BACKEND_CONFIG =    -backend-config=project='$${{ secrets.GCP_PROJECT }}' \
@@ -21,16 +24,13 @@ up: init plan apply
 down: init destroy
 
 init:
-# terraform init -reconfigure ${BACKEND_CONFIG} src
 	terraform init -reconfigure ${BACKEND_CONFIG}
 
 plan:
-# terraform plan ${VARIABLES} -out="plan.out"
-    terraform plan ${VARIABLES} -out="plan.out"
+	terraform plan ${VARIABLES} -out="plan.out"
 
 apply:
-    terraform apply plan.out
+	terraform apply plan.out
 
 destroy:
-# terraform destroy ${VARIABLES} src
-    terraform destroy ${VARIABLES}
+	terraform destroy ${VARIABLES}
