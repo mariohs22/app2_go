@@ -40,15 +40,20 @@ jobs:
           docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest .
           docker push gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest
 
-      #"${var.gcr_region}.gcr.io/${var.project}/${var.service_name}" : var.image_name
-
       # - name: Import service
       #   run: terraform init && terraform import google_cloud_run_service.service ${{ secrets.GCP_LOCATION }}/${{ secrets.GCP_SERVICE_NAME }}
       #   working-directory: ./infrastructure
 
-      - name: terraform
-        run: make up
-        working-directory: ./infrastructure
+      # - name: terraform
+      #   run: make up
+      #   working-directory: ./infrastructure
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v0.4.0
+        with:
+          service: ${{ secrets.GCP_SERVICE_NAME }}
+          image: gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest
 
   # lint:
   #   name: lint
