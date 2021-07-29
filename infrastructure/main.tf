@@ -1,8 +1,8 @@
 terraform {
-  required_version = ">= 0.12.7"
+  required_version = ">= 1.0"
 
   required_providers {
-    google = ">= 3.4"
+    google = ">= 3.77"
   }
 }
 
@@ -16,9 +16,9 @@ provider "google" {
 # DEPLOY A GOOGLE CLOUD SOURCE REPOSITORY
 # ---------------------------------------------------------------------------------------------------------------------
 
-resource "google_sourcerepo_repository" "repo" {
-  name = var.repository_name
-}
+# resource "google_sourcerepo_repository" "repo" {
+#   name = var.repository_name
+# }
 
 # ---------------------------------------------------------------------------------------------------------------------
 # DEPLOY A CLOUD RUN SERVICE
@@ -53,11 +53,28 @@ resource "google_cloud_run_service" "service" {
 # We give all users the ability to invoke the service.
 # ---------------------------------------------------------------------------------------------------------------------
 
-resource "google_cloud_run_service_iam_member" "allUsers" {
-  service  = google_cloud_run_service.service.name
+# resource "google_cloud_run_service_iam_member" "allUsers" {
+#   service  = google_cloud_run_service.service.name
+#   location = google_cloud_run_service.service.location
+#   role     = "roles/run.invoker"
+#   member   = "allUsers"
+# }
+
+data "google_iam_policy" "noauth" {
+  binding {
+    role = "roles/run.invoker"
+    members = [
+      "allUsers",
+    ]
+  }
+}
+
+resource "google_cloud_run_service_iam_policy" "noauth" {
   location = google_cloud_run_service.service.location
-  role     = "roles/run.invoker"
-  member   = "allUsers"
+  project  = google_cloud_run_service.service.project
+  service  = google_cloud_run_service.service.name
+
+  policy_data = data.google_iam_policy.noauth.policy_data
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
