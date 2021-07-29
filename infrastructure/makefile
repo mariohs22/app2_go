@@ -38,7 +38,7 @@ up: init plan apply
 down: init destroy
 
 init:
-	terraform init -reconfigure ${BACKEND_CONFIG}
+	terraform init -reconfigure
 
 plan:
 	terraform plan -out="plan.out"
