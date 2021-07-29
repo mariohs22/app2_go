@@ -22,10 +22,10 @@ init:
 	terraform init -reconfigure
 
 plan:
-	terraform plan -auto-approve
+	terraform plan -out="plan.out"
 
 apply:
-	terraform apply -auto-approve
+	terraform apply plan.out
 
 destroy:
 	terraform destroy
