@@ -7,11 +7,11 @@
 # terraform plan ${VARIABLES} -out="plan.out"
 # terraform destroy ${VARIABLES} src
 
-export TF_VAR_project=$${{ secrets.GCP_PROJECT }}
-export TF_VAR_location=$${{ secrets.GCP_LOCATION }}
-export TF_VAR_gcr_region=$${{ secrets.GCP_REGION }}
-export TF_VAR_service_name=$${{ secrets.GCP_SERVICE_NAME }}
-export TF_VAR_image_name=$${{ secrets.GCP_IMAGE_NAME }}
+export TF_VAR_project := $${{ secrets.GCP_PROJECT }}
+export TF_VAR_location := $${{ secrets.GCP_LOCATION }}
+export TF_VAR_gcr_region := $${{ secrets.GCP_REGION }}
+export TF_VAR_service_name := $${{ secrets.GCP_SERVICE_NAME }}
+export TF_VAR_image_name := $${{ secrets.GCP_IMAGE_NAME }}
 
 # -backend=true \
 # 		-backend-config="profile=$(AWS_PROFILE)" \
