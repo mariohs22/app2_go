@@ -24,8 +24,6 @@ export TF_VAR_image_name='$${{ secrets.GCP_IMAGE_NAME }}'
 # -backend-config="credentials=service-account.json"
 
 BACKEND_CONFIG =    -backend-config=bucket='$${{ secrets.GCP_PROJECT }}' \
-                    -backend-config=location='$${{ secrets.GCP_LOCATION }}' \
-                    -backend-config=region='$${{ secrets.GCP_REGION }}' \
 					-backend-config=credentials='$${{ secrets.SERVICE_ACCOUNT_KEY }}'
 #                    -backend-config=key='$${{ secrets.AZURE_TERRAFORM_RESOURCE_GROUP_NAME }}.tfstate'
 
