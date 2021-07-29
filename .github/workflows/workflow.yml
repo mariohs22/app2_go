@@ -50,7 +50,7 @@ jobs:
       - name: Create service
         run: |-
           gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --region ${{ secrets.GCP_LOCATION }}
-          yes | gcloud beta run services add-iam-policy-binding ${{ secrets.GCP_SERVICE_NAME }} --member=allUsers --role=roles/run.invoker
+          yes | gcloud beta run services add-iam-policy-binding ${{ secrets.GCP_SERVICE_NAME }} --member=allUsers --role=roles/run.invoker --region=${{ secrets.GCP_LOCATION }}
 
 # gcloud components install beta --quiet
 #
