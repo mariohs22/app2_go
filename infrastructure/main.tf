@@ -30,12 +30,12 @@ resource "google_cloud_run_service" "service" {
   }
 }
 
-resource "google_cloud_run_service_iam_member" "allUsers" {
-  service  = google_cloud_run_service.service.name
-  location = google_cloud_run_service.service.location
-  role     = "roles/run.invoker"
-  member   = "allUsers"
-}
+# resource "google_cloud_run_service_iam_member" "allUsers" {
+#   service  = google_cloud_run_service.service.name
+#   location = google_cloud_run_service.service.location
+#   role     = "roles/run.invoker"
+#   member   = "allUsers"
+# }
 
 # data "google_iam_policy" "noauth" {
 #   binding {
