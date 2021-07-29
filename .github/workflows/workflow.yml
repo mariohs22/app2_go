@@ -49,86 +49,87 @@ jobs:
       #--allow-unauthenticated
       - name: Create service
         run: |-
-          gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --region ${{ secrets.GCP_LOCATION }}
-          gcloud components install beta --quiet
-          gcloud beta run services add-iam-policy-binding ${{ secrets.GCP_SERVICE_NAME }} --member=allUsers --role=roles/run.invoker --region=${{ secrets.GCP_LOCATION }}
+          gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --region ${{ secrets.GCP_LOCATION }} --allow-unauthenticated
 
-      # - name: Deploy to Cloud Run
-      #   id: deploy
-      #   uses: google-github-actions/deploy-cloudrun@v0.4.0
-      #   with:
-      #     service: ${{ secrets.GCP_SERVICE_NAME }}
-      #     image: gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest
+# gcloud components install beta --quiet
+# gcloud beta run services add-iam-policy-binding ${{ secrets.GCP_SERVICE_NAME }} --member=allUsers --role=roles/run.invoker --region=${{ secrets.GCP_LOCATION }}
 
-  # lint:
-  #   name: lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Run Go lint
-  #       uses: golangci/golangci-lint-action@v2
-  #       with:
-  #         version: latest
+# - name: Deploy to Cloud Run
+#   id: deploy
+#   uses: google-github-actions/deploy-cloudrun@v0.4.0
+#   with:
+#     service: ${{ secrets.GCP_SERVICE_NAME }}
+#     image: gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest
 
-  # sec:
-  #   name: gosec
-  #   needs: lint
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     GO111MODULE: on
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Run Gosec Security scanner
-  #       uses: securego/gosec@master
-  #       with:
-  #         args: ./...
+# lint:
+#   name: lint
+#   runs-on: ubuntu-latest
+#   steps:
+#     - uses: actions/checkout@v2
+#     - name: Run Go lint
+#       uses: golangci/golangci-lint-action@v2
+#       with:
+#         version: latest
 
-  #   test:
-  #     needs: sec
-  #     strategy:
-  #       matrix:
-  #         go-version: [1.16.x]
-  #         os: [ubuntu-latest, macos-latest, windows-latest]
-  #     runs-on: ${{ matrix.os }}
-  #     steps:
-  #       - name: Install Go
-  #         uses: actions/setup-go@v2
-  #         with:
-  #           go-version: ${{ matrix.go-version }}
-  #       - name: Checkout code
-  #         uses: actions/checkout@v2
-  #       - name: Test
-  #         run: go test -v ./...
+# sec:
+#   name: gosec
+#   needs: lint
+#   runs-on: ubuntu-latest
+#   env:
+#     GO111MODULE: on
+#   steps:
+#     - uses: actions/checkout@v2
+#     - name: Run Gosec Security scanner
+#       uses: securego/gosec@master
+#       with:
+#         args: ./...
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   needs: sec
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
+#   test:
+#     needs: sec
+#     strategy:
+#       matrix:
+#         go-version: [1.16.x]
+#         os: [ubuntu-latest, macos-latest, windows-latest]
+#     runs-on: ${{ matrix.os }}
+#     steps:
+#       - name: Install Go
+#         uses: actions/setup-go@v2
+#         with:
+#           go-version: ${{ matrix.go-version }}
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+#       - name: Test
+#         run: go test -v ./...
 
-  #     - name: Setup Cloud SDK
-  #       uses: google-github-actions/setup-gcloud@v0.2.0
-  #       with:
-  #         project_id: ${{ env.PROJECT_ID }}
-  #         service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-  #         export_default_credentials: true # Set to true to authenticate the Cloud Run action
+# deploy:
+#   runs-on: ubuntu-latest
+#   needs: sec
+#   steps:
+#     - name: Checkout
+#       uses: actions/checkout@v2
 
-  #     - name: Authorize Docker push
-  #       run: gcloud auth configure-docker
+#     - name: Setup Cloud SDK
+#       uses: google-github-actions/setup-gcloud@v0.2.0
+#       with:
+#         project_id: ${{ env.PROJECT_ID }}
+#         service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+#         export_default_credentials: true # Set to true to authenticate the Cloud Run action
 
-  #     - name: Build and Push Container
-  #       run: |-
-  #         docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
-  #         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+#     - name: Authorize Docker push
+#       run: gcloud auth configure-docker
 
-  #     - name: Deploy to Cloud Run
-  #       id: deploy
-  #       uses: google-github-actions/deploy-cloudrun@v0.4.0
-  #       with:
-  #         service: ${{ env.SERVICE }}
-  #         image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
-  #         region: ${{ env.REGION }}
+#     - name: Build and Push Container
+#       run: |-
+#         docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
+#         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
 
-  #     - name: Show Output
-  #       run: echo ${{ steps.deploy.outputs.url }}
+#     - name: Deploy to Cloud Run
+#       id: deploy
+#       uses: google-github-actions/deploy-cloudrun@v0.4.0
+#       with:
+#         service: ${{ env.SERVICE }}
+#         image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+#         region: ${{ env.REGION }}
+
+#     - name: Show Output
+#       run: echo ${{ steps.deploy.outputs.url }}
