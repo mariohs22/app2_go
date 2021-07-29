@@ -36,6 +36,7 @@ jobs:
 
       - name: Import service
         run: terraform import google_cloud_run_service.${{ secrets.GCP_SERVICE_NAME }} ${{ secrets.GCP_LOCATION }}/${{ secrets.GCP_SERVICE_NAME }}
+        working-directory: ./infrastructure
         env:
           TF_VAR_project: ${{ secrets.GCP_PROJECT }}
           TF_VAR_location: ${{ secrets.GCP_LOCATION }}
