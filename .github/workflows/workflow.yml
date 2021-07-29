@@ -15,7 +15,8 @@ env:
   TF_VAR_location: ${{ secrets.GCP_LOCATION }}
   TF_VAR_gcr_region: ${{ secrets.GCP_REGION }}
   TF_VAR_service_name: ${{ secrets.GCP_SERVICE_NAME }}
-  TF_VAR_image_name: ${{ secrets.GCP_IMAGE_NAME }}
+  TF_VAR_image_name: ""
+#  ${{ secrets.GCP_IMAGE_NAME }}
 
 jobs:
   terraform:
@@ -36,8 +37,10 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:${{  github.sha }} .
-          docker push gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:${{  github.sha }}
+          docker build -t ${{ secrets.GCP_REGION }}.gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:${{  github.sha }} .
+          docker push ${{ secrets.GCP_REGION }}.gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:${{  github.sha }}
+
+      #"${var.gcr_region}.gcr.io/${var.project}/${var.service_name}" : var.image_name
 
       # - name: Import service
       #   run: terraform init && terraform import google_cloud_run_service.service ${{ secrets.GCP_LOCATION }}/${{ secrets.GCP_SERVICE_NAME }}
