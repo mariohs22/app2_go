@@ -36,9 +36,9 @@ Fork this repository. Fill in environmental variables in ./github/workflows/work
 
 CI/CD job uses GitHub secrets, which you can setting up on `Settings / Secrets` section:
 
-`SERVICE_ACCOUNT_KEY` - Google service account credentials (JSON).
-`TELEGRAM_TOKEN` - Telegram Bot token.
-`TELEGRAM_TO` - Your telegram channel (`@channelname`) or user id. You can find your user id, for example by talking to [@jsondumpbot](https://t.me/jsondumpbot)
+- `SERVICE_ACCOUNT_KEY` - Google service account credentials (JSON).
+- `TELEGRAM_TOKEN` - Telegram Bot token.
+- `TELEGRAM_TO` - Your telegram channel (`@channelname`) or user id. You can find your user id, for example by talking to [@jsondumpbot](https://t.me/jsondumpbot)
 
 ### LOGS
 
