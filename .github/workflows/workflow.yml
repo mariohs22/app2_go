@@ -118,7 +118,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           args: App2_go CI/CD job has fail.
 
-      - name: The job has failure
+      - name: The job has succeeded
         if: ${{ success() }}
         uses: appleboy/telegram-action@master
         with:
