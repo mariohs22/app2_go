@@ -11,11 +11,6 @@ env:
   PROJECT_ID: app-go-terraform
   SERVICE: sample-docker-service
   REGION: us-central1
-  TF_VAR_project: ${{ secrets.GCP_PROJECT }}
-  TF_VAR_location: ${{ secrets.GCP_LOCATION }}
-  TF_VAR_gcr_region: ${{ secrets.GCP_REGION }}
-  TF_VAR_service_name: ${{ secrets.GCP_SERVICE_NAME }}
-  TF_VAR_image_name: ${{ secrets.GCP_IMAGE_NAME }}
 
 jobs:
   terraform:
@@ -34,6 +29,12 @@ jobs:
       - name: build application
         run: make up
         working-directory: ./infrastructure
+        env:
+          TF_VAR_project: ${{ secrets.GCP_PROJECT }}
+          TF_VAR_location: ${{ secrets.GCP_LOCATION }}
+          TF_VAR_gcr_region: ${{ secrets.GCP_REGION }}
+          TF_VAR_service_name: ${{ secrets.GCP_SERVICE_NAME }}
+          TF_VAR_image_name: ${{ secrets.GCP_IMAGE_NAME }}
 
   # lint:
   #   name: lint
