@@ -48,12 +48,15 @@ jobs:
       #   run: make up
       #   working-directory: ./infrastructure
 
-      - name: Deploy to Cloud Run
-        id: deploy
-        uses: google-github-actions/deploy-cloudrun@v0.4.0
-        with:
-          service: ${{ secrets.GCP_SERVICE_NAME }}
-          image: gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest
+      - name: Create service
+        run: gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} --image gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest --allow-unauthenticated
+
+      # - name: Deploy to Cloud Run
+      #   id: deploy
+      #   uses: google-github-actions/deploy-cloudrun@v0.4.0
+      #   with:
+      #     service: ${{ secrets.GCP_SERVICE_NAME }}
+      #     image: gcr.io/${{ secrets.GCP_PROJECT }}/${{ secrets.GCP_SERVICE_NAME }}:latest
 
   # lint:
   #   name: lint
