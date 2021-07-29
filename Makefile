@@ -12,7 +12,9 @@ BACKEND_CONFIG =    -backend-config=project='$${{ secrets.GCP_PROJECT }}' \
 					-backend-config=image_name='$${{ secrets.GCP_IMAGE_NAME }}'
 #                    -backend-config=key='$${{ secrets.AZURE_TERRAFORM_RESOURCE_GROUP_NAME }}.tfstate'
 
-# VARIABLES = -var=path=${PWD}/config/resource-groups \
+VARIABLES = -var=path=${PWD}/config/resource-groups \
+
+.PHONY = all init plan apply destroy up down
 
 all:
 
@@ -34,4 +36,3 @@ apply:
 destroy:
     terraform destroy # ${VARIABLES} src
 
-.PHONY = all init plan apply destroy up down
